@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+class PokeDetail extends StatelessWidget {
+  const PokeDetail({super.key});
 
   @override
   Widget build(BuildContext context) {
