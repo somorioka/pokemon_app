@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pokemon_app/models/pokemon_notifier.dart';
 import 'package:pokemon_app/models/theme_mode.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,11 +12,19 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final SharedPreferences pref = await SharedPreferences.getInstance();
   final themeModeNotifier = ThemeModeNotifier(pref);
-  
-  runApp(ChangeNotifierProvider(
-    create: (context) => themeModeNotifier,
+  final pokemonsNotifier = PokemonsNotifier();
+
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<ThemeModeNotifier>(
+      create: (context) => themeModeNotifier,
+      ),
+      ChangeNotifierProvider<PokemonsNotifier>(
+      create: (context) => pokemonsNotifier,
+      ),
+    ],
     child: const MyApp(),
-    ));
+  ));
 }
 
 class MyApp extends StatefulWidget {

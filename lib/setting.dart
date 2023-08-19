@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pokemon_app/models/theme_mode.dart';
+import 'package:provider/provider.dart';
 
 import 'theme_mode_select.dart';
 import 'utils/store_data.dart';
@@ -15,25 +17,28 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-         ListTile(
-          leading: Icon(Icons.lightbulb),
-          title: Text('Dark/Light Mode'),
-          trailing: Text((_themeMode == ThemeMode.system)
-          ? 'System'
-          : (_themeMode == ThemeMode.dark ? 'Dark' : 'Light')),
-          onTap: () async {
-            var ret = await Navigator.of(context).push<ThemeMode>(
-              MaterialPageRoute(
-      builder: (context) =>  ThemeModeSelectionPage(mode: _themeMode),
-      )
-      );
-     setState(() => _themeMode = ret!);
-     await saveThemeMode(_themeMode);
-          }
-        ),
-      ],
+    return Consumer<ThemeModeNotifier>(
+      builder: (context, mode, child) => ListView(
+        children: [
+           ListTile(
+            leading: Icon(Icons.lightbulb),
+            title: Text('Dark/Light Mode'),
+            trailing: Text((mode.mode == ThemeMode.system)
+            ? 'System'
+            : (mode.mode == ThemeMode.dark ? 'Dark' : 'Light')),
+            onTap: () async {
+              var ret = await Navigator.of(context).push<ThemeMode>(
+                MaterialPageRoute(
+        builder: (context) =>  ThemeModeSelectionPage(init: mode.mode),
+        )
+        );
+        if (ret != null){
+          mode.update(ret);
+        }
+            }
+          ),
+        ],
+      ),
     );
   }
 }
